@@ -1,0 +1,22 @@
+.elements__group-button {
+  margin: 0;
+  padding: 0;
+  width: 22px;
+  height: 19px;
+  background-image: url(../../../images/Vector_heart.svg);
+  background-repeat: no-repeat;
+  background-size: 22px 19px;
+  background-position: 0;
+  background-color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+.elements__group-button:hover {
+  opacity: 0.5;
+}
+
+.elements__group-button:active {
+  background-image: url("../../../images/Union.svg");
+  opacity: 1;
+}

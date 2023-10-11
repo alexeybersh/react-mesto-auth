@@ -1,0 +1,13 @@
+.main-page {
+  margin: 0;
+  padding: 0;
+  padding-left: max(200px, 0);
+  max-width: 1280px;
+  min-height: 75vh;
+}
+
+@media screen and (max-width: 890px) {
+  .main-page {
+    padding: 0;
+  }
+}

@@ -1,0 +1,12 @@
+.profile__first-row {
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+@media screen and (max-width: 890px) {
+  .profile__first-row {
+    max-width: 282px;
+    align-items: center;
+  }
+}

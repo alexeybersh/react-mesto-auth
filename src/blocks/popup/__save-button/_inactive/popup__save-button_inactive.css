@@ -1,0 +1,8 @@
+.popup__save-button_inactive {
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.15);
+  background-color: rgb(255, 255, 255);
+  pointer-events: none;
+  line-height: 20.4px;
+}
