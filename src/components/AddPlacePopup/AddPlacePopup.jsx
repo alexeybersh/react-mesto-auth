@@ -1,29 +1,29 @@
 import { createRef, useState, useEffect} from 'react'
 import PopupWithForm from "../PopupWithForm/PopupWithForm"
 
-export default function AddPlacePopup(props) {
+export default function AddPlacePopup({onClose,isRenderLoading,isOpen,onAddPlace}){
   const namePlace = createRef();
   const linkPlace = createRef();
-  const [nameDirty, setNameDyrty] = useState(0)
+  const [nameDirty, setNameDyrty] = useState(false)
   const [nameError, setNameError] = useState("Поле не может быть пустым")
-  const [linkDirty, setLinkDirty] = useState(0)
+  const [linkDirty, setLinkDirty] = useState(false)
   const [linkError, setLinkError] = useState("Поле не может быть пустым")
-  const [formVailed, setFormVailed] = useState(0)
+  const [formVailed, setFormVailed] = useState(false)
 
   function bluerHandler(e){
     switch(e.target.name){
       case "name": 
-        setNameDyrty(1)
+        setNameDyrty(true)
         break
       case "link":
-        setLinkDirty(1)
+        setLinkDirty(true)
         break
     }
   }
 
   function handleChangeName() {
     if (namePlace.current.value.length < 2 || namePlace.current.value.length > 30) {
-      setNameDyrty(1)
+      setNameDyrty(true)
       setNameError('Название не может быть короче 2 символов или длинее 30 символов')
     if (!namePlace.current.value) {
       setNameError("Поле не может быть пустым")
@@ -36,7 +36,7 @@ export default function AddPlacePopup(props) {
   function handleChangeLink() {
     const urlPattern = new RegExp(/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/);
     if (!urlPattern.test(linkPlace.current.value)) {
-      setLinkDirty(1)
+      setLinkDirty(true)
       setLinkError('Неверный адрес страницы')
       if (!linkPlace.current.value) {
         setLinkError("Поле не может быть пустым")
@@ -47,20 +47,20 @@ export default function AddPlacePopup(props) {
   } 
 
   useEffect(() => {
-    setNameDyrty(0)
-    setLinkDirty(0)
+    setNameDyrty(false)
+    setLinkDirty(false)
     namePlace.current.value =""
     linkPlace.current.value =""
     setNameError("Поле не может быть пустым")
     setLinkError("Поле не может быть пустым")
-    setFormVailed(0)
-  }, [props.isOpen])
+    setFormVailed(false)
+  }, [isOpen])
 
   useEffect(() => {
     if(linkError || nameError) {
-      setFormVailed(0)
+      setFormVailed(false)
     } else {
-      setFormVailed(1)
+      setFormVailed(true)
     }
   }, [linkError, nameError])
   
@@ -68,7 +68,7 @@ export default function AddPlacePopup(props) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    props.onAddPlace({
+    onAddPlace({
       name: namePlace.current.value,
       link: linkPlace.current.value
     });
@@ -78,9 +78,9 @@ export default function AddPlacePopup(props) {
     <PopupWithForm
       name="add-image"
       title="Новое место"
-      submitText={props.isRenderLoading? "Сохранить..." : "Сохранить"}
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      submitText={isRenderLoading? "Сохранить..." : "Сохранить"}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
       onDisabled={!formVailed}> 
       <label className="popup__field">

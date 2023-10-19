@@ -1,20 +1,20 @@
 import {createRef, useState, useEffect } from 'react'
 import PopupWithForm from "../PopupWithForm/PopupWithForm"
 
-export default function EditAvatarPopup(props) {
+export default function EditAvatarPopup({isOpen,isRenderLoading,onUpdateAvatar,onClose}) {
   const avatarLink = createRef();
-  const [linkDirty, setLinkDirty] = useState(0)
+  const [linkDirty, setLinkDirty] = useState(false)
   const [linkError, setLinkError] = useState("Поле не может быть пустым")
-  const [formVailed, setFormVailed] = useState(0)
+  const [formVailed, setFormVailed] = useState(false)
   
   function bluerHandler(){
-    setLinkDirty(1)
+    setLinkDirty(true)
   }
 
   function handleChangeLink() {
     const urlPattern = new RegExp(/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/);
     if (!urlPattern.test(avatarLink.current.value)) {
-      setLinkDirty(1)
+      setLinkDirty(true)
       setLinkError('Неверный адрес страницы')
       if (!avatarLink.current.value) {
         setLinkError("Поле не может быть пустым")
@@ -28,14 +28,14 @@ export default function EditAvatarPopup(props) {
     setLinkDirty(0)
     avatarLink.current.value =""
     setLinkError("Поле не может быть пустым")
-    setFormVailed(0)
-  }, [props.isOpen])
+    setFormVailed(false)
+  }, [isOpen])
 
   useEffect(() => {
     if(linkError) {
-      setFormVailed(0)
+      setFormVailed(false)
     } else {
-      setFormVailed(1)
+      setFormVailed(true)
     }
   }, [linkError])
 
@@ -43,7 +43,7 @@ export default function EditAvatarPopup(props) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    props.onUpdateAvatar({
+    onUpdateAvatar({
       link: avatarLink.current.value
     });
   } 
@@ -52,9 +52,9 @@ export default function EditAvatarPopup(props) {
     <PopupWithForm
       name="avatar"
       title="Обновить аватар"
-      submitText={props.isRenderLoading? "Сохранить..." : "Сохранить"}
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      submitText={isRenderLoading? "Сохранить..." : "Сохранить"}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
       onDisabled={!formVailed}>      
       <label className="popup__field">

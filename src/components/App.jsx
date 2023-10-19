@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
-import Header from './header/Header'
-import Main from './main/Main'
-import Footer from './footer/Footer'
+import{ Routes, Route, useNavigate, Navigate } from 'react-router-dom'
+import Register from './Register/Register'
+import Login from './Login/Login'
+import InfoTooltip from './InfoTooltip/InfoTooltip'
+import Main from './Main/Main'
+import Footer from './Footer/Footer'
+import ProtectedRoute from './ProtectedRoute/ProtectedRoute'
 import EditProfilePopup from './EditProfilePopup/EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup/EditAvatarPopup'
 import AddPlacePopup from './AddPlacePopup/AddPlacePopup'
@@ -9,53 +13,58 @@ import DeleteConfirmPopup from './DeleteConfirmPopup/DeleteConfirmPopup'
 import ImagePopup from './ImagePopup/ImagePopup'
 import {CurrentUserContext } from '../components/contexts/CurrentUserContext';
 import { api } from '../utils/Api'
+import { authApi } from '../utils/Auth'
 
 export default function App() {
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(0)
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(0)
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(0)
-  const [isDeleteConfirmPopupOpen, setIsDeleteConfirmPopupOpen] = useState(0)
-  const [isImagePopupOpen, setIsImagePopupOpen] = useState(0)
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
+  const [isDeleteConfirmPopupOpen, setIsDeleteConfirmPopupOpen] = useState(false)
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([])
   const [selectedCard, setSelectedCard] = useState({})
-  const [renderLoading, setRenderLoading] = useState(0)
+  const [renderLoading, setRenderLoading] = useState(false)
   const [cardDelete, setCardDelete] = useState({})
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isMessage, setIsMessage] = useState({ text: '', isSign: '' })
+  const [email, setEmail] = useState('')
+  const navigate = useNavigate()
 
   // Ручка для открытия попапа аватара
   function handleEditAvatarClick() {
-    setIsEditAvatarPopupOpen(1)
+    setIsEditAvatarPopupOpen(true)
   }
   
   // Ручка для открытия попапа редактирование профиля
   function handleEditProfileClick(){
-    setIsEditProfilePopupOpen(1)
+    setIsEditProfilePopupOpen(true)
   }
 
   // Ручка для открытия попапа добавление картинки
   function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(1)
+    setIsAddPlacePopupOpen(true)
   }
 
   function handleDeleteConfirmClick(card){
-    setIsDeleteConfirmPopupOpen(1)
+    setIsDeleteConfirmPopupOpen(true)
     setCardDelete(card)
   }
 
   // Ручка для открытия попапа большой картинки
   function handleCardClick (card) {
-    setIsImagePopupOpen(1)
+    setIsImagePopupOpen(true)
     setSelectedCard({name: card.name, link: card.link})
   }
 
   // Ручка закрытия всех попапов
   function closeAllPopups(){
-    setIsEditAvatarPopupOpen(0)
-    setIsEditProfilePopupOpen(0)
-    setIsAddPlacePopupOpen(0)
-    setIsImagePopupOpen(0)
-    setIsDeleteConfirmPopupOpen(0)
+    setIsEditAvatarPopupOpen(false)
+    setIsEditProfilePopupOpen(false)
+    setIsAddPlacePopupOpen(false)
+    setIsImagePopupOpen(false)
+    setIsDeleteConfirmPopupOpen(false)
+    setIsMessage('')
   }
 
   // Ручка для установки лайка
@@ -81,7 +90,7 @@ export default function App() {
 
   // Ручка для удаления карточки
   function handleCardDelete(card){
-    setRenderLoading(1)
+    setRenderLoading(true)
     api.deleteCard(card._id)
       .then(() => {
         setCards(cards.filter((c) => c._id !== card._id))
@@ -91,13 +100,13 @@ export default function App() {
       .catch((err) => {console.log(err)})
       
       .finally(() => {
-        setRenderLoading(0)
+        setRenderLoading(false)
       }) 
   }
 
   // Ручка для обновления профиля
   function handleUpdateUser(newData){
-    setRenderLoading(1)
+    setRenderLoading(true)
     api.setUserInfo(newData)
     .then((data) => {
       setCurrentUser(data)
@@ -107,13 +116,13 @@ export default function App() {
     .catch((err) => {console.log(err)})
 
     .finally(() => {
-      setRenderLoading(0)
+      setRenderLoading(false)
     }) 
   } 
 
   // Ручка для обновления аватара
   function handleUpdateAvatar(newData){
-    setRenderLoading(1)
+    setRenderLoading(true)
     api.setAvatar(newData)
     .then((data) => { 
       setCurrentUser(data)
@@ -123,13 +132,13 @@ export default function App() {
     .catch((err) => {console.log(err)})
 
     .finally(() => {
-      setRenderLoading(0)
+      setRenderLoading(false)
     }) 
   }
 
   // Ручка для обновления картинки
   function handleAddPlaceSubmit(newData){
-    setRenderLoading(1)
+    setRenderLoading(true)
     api.createCard(newData)
     .then((newCard) => {
       setCards([newCard, ...cards])
@@ -139,7 +148,7 @@ export default function App() {
     .catch((err) => {console.log(err)})
 
     .finally(() => {
-      setRenderLoading(0)
+      setRenderLoading(false)
     }) 
   }
   
@@ -156,7 +165,7 @@ export default function App() {
 
   // Эффект для закрытия попапа по ESC и по overlay
   useEffect(() => {
-    if(isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isDeleteConfirmPopupOpen || isImagePopupOpen)
+    if(isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isDeleteConfirmPopupOpen || isImagePopupOpen || setIsMessage)
     {
       function handleEscape(evt) {
         if(evt.key == 'Escape') {
@@ -175,22 +184,91 @@ export default function App() {
 
       return() => {
         document.removeEventListener('keydown', handleEscape)
-        document.removeEventListener('mousedown', handleOverlay)  
+        document.removeEventListener('mousedown', handleOverlay)
       }
     }    
-  }, [isEditAvatarPopupOpen, isEditProfilePopupOpen, isAddPlacePopupOpen, isDeleteConfirmPopupOpen, isImagePopupOpen])
+  }, [isEditAvatarPopupOpen, isEditProfilePopupOpen, isAddPlacePopupOpen, isDeleteConfirmPopupOpen, isImagePopupOpen, setIsMessage])
+
+  function auth(token) {
+    authApi.getContent(token).then(() => {
+      setIsLoggedIn(true)
+      navigate('/')
+    })
+    .catch(() => {
+      navigate('/sign-in')
+    })
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt')
+    auth(token)
+  }, [])
+  
+  function hahdleLogin(email, password) {
+    return authApi.authorize(email, password)
+    .then((res) => {
+      if (res.token) {
+
+        setIsLoggedIn(true)
+        localStorage.setItem('jwt', res.token)
+        navigate('/')
+      }
+    })
+    .catch((error) => {
+      if(error === 'Ошибка: 400') {
+        setIsMessage({
+          text: 'не передано одно из полей', 
+          isSign: '0'})
+      }
+      if(error === 'Ошибка: 401') {
+        setIsMessage({
+          text: 'пользователь с email не найден', 
+          isSign: '0'})
+      }
+    })
+  }
+
+  function handleRegister(email, password) {
+    return authApi.register(email, password)
+    .then(() => {
+      setIsMessage({
+        text: 'Вы успешно зарегистрировались!', 
+        isSign: '1'})
+        navigate('/sign-in')
+    })
+    .catch((err) => {
+      if (err === 'Ошибка: 400') {
+        setIsMessage({
+          text: 'Что-то пошло не так! Попробуйте ещё раз.', 
+          isSign: '0'})
+    }})
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header/>
-      <Main
-        onEditAvatar={handleEditAvatarClick}
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onCardClick={handleCardClick}
-        onCardLike={handleCardLike}
-        onCardDelete={handleDeleteConfirmClick}
-        cards={ cards }/>      
+      <Routes>
+        <Route path='/sign-in' element={<Login onLogin={hahdleLogin}/>}
+        />
+        <Route path='/sign-up' element={<Register onRegister={handleRegister}/>}
+        />
+        <Route path='/' element={
+          <ProtectedRoute loggedIn={isLoggedIn}>
+            <Main
+              onEditAvatar={handleEditAvatarClick}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleDeleteConfirmClick}
+              cards={ cards }
+            />
+          </ProtectedRoute>}
+        />
+      </Routes>
+      {isLoggedIn && <Footer/>}
+      <InfoTooltip
+        isMessage={isMessage}
+        onClose={closeAllPopups}/>
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onUpdateUser={handleUpdateUser}
@@ -217,7 +295,6 @@ export default function App() {
         card={selectedCard}
         onClose={closeAllPopups}>
       </ImagePopup>
-      <Footer/>
     </CurrentUserContext.Provider>
   )
 }

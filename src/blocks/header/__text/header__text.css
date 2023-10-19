@@ -1,0 +1,13 @@
+.header__text{
+  margin: 0;
+  padding: 6px 0 0;
+  color: white;
+  font-size: 18px;
+  line-height: 22px;
+  text-decoration: none;
+}
+
+.header__text:hover{
+  opacity: 0.6;
+  cursor: pointer;
+}

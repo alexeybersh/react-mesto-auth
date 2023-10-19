@@ -3,23 +3,23 @@ import PopupWithForm from "../PopupWithForm/PopupWithForm"
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
-export default function EditProfilePopup(props) {
+export default function EditProfilePopup({isOpen,onUpdateUser,isRenderLoading,onClose}) {
     const currentUser = useContext(CurrentUserContext);
     const [name, setName] = useState('')
     const [description  , setDescription  ] = useState('')  
-    const [nameDirty, setNameDyrty] = useState(0)
+    const [nameDirty, setNameDyrty] = useState(false)
     const [nameError, setNameError] = useState('')
-    const [jobDirty, setJobDirty] = useState(0)
+    const [jobDirty, setJobDirty] = useState(false)
     const [jobError, setJobError] = useState('')
-    const [formVailed, setFormVailed] = useState(0)
+    const [formVailed, setFormVailed] = useState(false)
   
     function bluerHandler(e){
       switch(e.target.name){
         case "name": 
-          if(!name) setNameDyrty(1)
+          if(!name) setNameDyrty(true)
           break
         case "job":
-          if(!description) setJobDirty(1)
+          if(!description) setJobDirty(true)
           break
       }
     }
@@ -28,7 +28,7 @@ export default function EditProfilePopup(props) {
     function handleNameChange(e) {
       setName(e.target.value);
       if (e.target.value.length < 2 || e.target.value.length > 40) {
-        setNameDyrty(1)
+        setNameDyrty(true)
         setNameError('Имя не может быть короче 2 символов или длинее 40 символов')
       if (!e.target.value) {
         setNameError("Поле не может быть пустым")
@@ -42,7 +42,7 @@ export default function EditProfilePopup(props) {
     function handledDescriptionChange(e) {
       setDescription(e.target.value);
       if (e.target.value.length < 2 || e.target.value.length > 200) {
-        setJobDirty(1)
+        setJobDirty(true)
         setJobError('Название не может быть короче 2 символов или длинее 200 символов')
         if (!e.target.value) {
           setJobError("Поле не может быть пустым")
@@ -61,16 +61,16 @@ export default function EditProfilePopup(props) {
     useEffect(() => {
       setName(currentUser.name);
       setDescription(currentUser.about);
-      setNameDyrty(0)
-      setJobDirty(0)
-      setFormVailed(0)
-    }, [props.isOpen])
+      setNameDyrty(false)
+      setJobDirty(false)
+      setFormVailed(false)
+    }, [isOpen])
   
     useEffect(() => {
       if((nameError || jobError))  {
-        setFormVailed(0)
+        setFormVailed(false)
       } else {
-        setFormVailed(1)
+        setFormVailed(true)
       }
     }, [name, description])
     
@@ -78,7 +78,7 @@ export default function EditProfilePopup(props) {
     function handleSubmit(e) {
       e.preventDefault();
 
-      props.onUpdateUser({
+      onUpdateUser({
         name,
         job: description,
       });
@@ -88,9 +88,9 @@ export default function EditProfilePopup(props) {
     <PopupWithForm
         name="edit-profile"
         title="Редактировать профиль"
-        submitText={props.isRenderLoading? "Сохранить..." : "Сохранить"}
-        isOpen={props.isOpen}
-        onClose={props.onClose}
+        submitText={isRenderLoading? "Сохранить..." : "Сохранить"}
+        isOpen={isOpen}
+        onClose={onClose}
         onSubmit={handleSubmit}
         onDisabled={!formVailed}>  
       <label className="popup__field">
