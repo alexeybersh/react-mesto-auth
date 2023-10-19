@@ -1,7 +1,7 @@
 {
   "name": "react-mesto-auth",
   "private": true,
-  "homepage": "https://alexeybersh.github.io/",
+  "homepage": "https://alexeybersh.github.io/react-mesto-auth",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

@@ -277,6 +277,9 @@ export default function App() {
             />
           </ProtectedRoute>}
         />
+        <Route
+          path="*" element={<Navigate to={isLoggedIn ? "/" : "/sign-in"} />}
+        />
       </Routes>
       {isLoggedIn && <Footer/>}
       <InfoTooltip
