@@ -1,19 +1,24 @@
 import { useContext} from 'react';
+import{ Link } from 'react-router-dom'
 import Card from '../Card/Card'
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Header from '../header/Header';
 
-export default function Main({cards,onEditAvatar,onEditProfile,onAddPlace,onCardClick,onCardLike,onCardDelete,}) {
+export default function Main({cards,email,onEditAvatar,onEditProfile,onAddPlace,onCardClick,onCardLike,onCardDelete,onExit}) {
 const {avatar,name,about} = useContext(CurrentUserContext);
 
 return (
   <>
     <Header>
-    
+      <div>      
+        <p className='header__text-email'>{email}
+          <Link to='/sign-in' className='header__text_color' onClick={onExit}>Выйти</Link>
+        </p> 
+      </div>
     </Header>
     <main className="main-page">
       <section className="profile">
-        <div className="profile__intro">
+        <div className="profile__intro"> 
           <button type="button" className="profile__avatar-button" onClick={onEditAvatar}>
             <img className="profile__avatar" src={avatar} alt="Аватар профиля"/>
           </button>

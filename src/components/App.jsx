@@ -16,6 +16,7 @@ import { api } from '../utils/Api'
 import { authApi } from '../utils/Auth'
 
 export default function App() {
+  const  loggenInFromStorage = JSON.parse(localStorage.getItem('isLoggenIn'))
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
@@ -26,9 +27,9 @@ export default function App() {
   const [selectedCard, setSelectedCard] = useState({})
   const [renderLoading, setRenderLoading] = useState(false)
   const [cardDelete, setCardDelete] = useState({})
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(loggenInFromStorage)
   const [isMessage, setIsMessage] = useState({ text: '', isSign: '' })
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(null)
   const navigate = useNavigate()
 
   // Ручка для открытия попапа аватара
@@ -191,11 +192,14 @@ export default function App() {
 
   function auth(token) {
     authApi.getContent(token).then(() => {
+      localStorage.setItem('isLoggenIn', JSON.stringify(true))
       setIsLoggedIn(true)
       navigate('/')
+      setEmail(localStorage.getItem('email'))
     })
     .catch(() => {
-      navigate('/sign-in')
+      localStorage.setItem('isLoggenIn', JSON.stringify(false))
+      navigate('/sign-in', {replace: false} )
     })
   }
 
@@ -205,13 +209,15 @@ export default function App() {
   }, [])
   
   function hahdleLogin(email, password) {
+    setEmail(email)
+    localStorage.setItem('email', email)
     return authApi.authorize(email, password)
     .then((res) => {
       if (res.token) {
-
+        localStorage.setItem('isLoggenIn', JSON.stringify(true))
         setIsLoggedIn(true)
         localStorage.setItem('jwt', res.token)
-        navigate('/')
+        navigate('/' , {replece: false})
       }
     })
     .catch((error) => {
@@ -234,7 +240,7 @@ export default function App() {
       setIsMessage({
         text: 'Вы успешно зарегистрировались!', 
         isSign: '1'})
-        navigate('/sign-in')
+        navigate('/sign-in', {replece: false})
     })
     .catch((err) => {
       if (err === 'Ошибка: 400') {
@@ -242,6 +248,11 @@ export default function App() {
           text: 'Что-то пошло не так! Попробуйте ещё раз.', 
           isSign: '0'})
     }})
+  }
+
+  function onSignOut(){
+    localStorage.clear()
+    loggenInFromStorage(false)
   }
 
   return (
@@ -259,7 +270,9 @@ export default function App() {
               onAddPlace={handleAddPlaceClick}
               onCardClick={handleCardClick}
               onCardLike={handleCardLike}
+              email={email}
               onCardDelete={handleDeleteConfirmClick}
+              onExit={onSignOut}
               cards={ cards }
             />
           </ProtectedRoute>}

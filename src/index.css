@@ -14,6 +14,8 @@
 @import "../src/blocks/header/header.css";
 @import "../src/blocks/header/__logo/header__logo.css";
 @import "../src/blocks/header/__text/header__text.css";
+@import "../src/blocks/header/__text/_color/header__text_color.css";
+@import "../src/blocks/header/__text-email/header__text-email.css";
 
 /* login */
 @import "../src/blocks/login/__text-entry/login__text-entry.css";

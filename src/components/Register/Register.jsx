@@ -22,7 +22,7 @@ export default function Register({onRegister}) {
   return (  
     <>
       <Header>
-        <Link to='/sign-in' className='header__text'>Вход</Link>
+        <Link to='/sign-in' className='header__text'>Войти</Link>
       </Header>
       <main>
         <h2 className='login__text-entry'>Регистрация</h2>
