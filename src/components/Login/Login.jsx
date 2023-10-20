@@ -34,7 +34,6 @@ export default function Login({onLogin}) {
             type="email"
             placeholder="Email"
             ref={inputEmail}
-            // required
           />
           <input
             className="login__input"
@@ -43,7 +42,6 @@ export default function Login({onLogin}) {
             type="password"
             placeholder="Пароль"
             ref={inputPassword}
-            // required  
           />
           <button className="login__save-button" type="submit">
             Войти

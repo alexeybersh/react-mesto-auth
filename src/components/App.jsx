@@ -217,7 +217,7 @@ export default function App() {
         localStorage.setItem('isLoggenIn', JSON.stringify(true))
         setIsLoggedIn(true)
         localStorage.setItem('jwt', res.token)
-        navigate('/' , {replece: false})
+        navigate('/' , {replece: true})
       }
     })
     .catch((error) => {
@@ -277,8 +277,7 @@ export default function App() {
             />
           </ProtectedRoute>}
         />
-        <Route
-          path="*" element={<Navigate to={isLoggedIn ? "/" : "/sign-in"} />}
+        <Route path="*" element={<Navigate to={isLoggedIn ? '/' : '/sign-in'} />}
         />
       </Routes>
       {isLoggedIn && <Footer/>}
