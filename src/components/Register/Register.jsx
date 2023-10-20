@@ -46,7 +46,7 @@ export default function Register({onRegister}) {
           <button className="login__save-button" type="submit">
             Зарегистрироваться
           </button>
-          <Link to='/react-mesto-auth/sign-in' className='login__text'>Уже зарегистрированы? Войти</Link>
+          <Link to='/react-mesto-auth/sign-in' replace className='login__text'>Уже зарегистрированы? Войти</Link>
         </form>
       </main>
     </>
