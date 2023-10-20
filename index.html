@@ -5,11 +5,23 @@
     <link rel="icon" type="image/svg+xml" href="/react-mesto-auth/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
-    <script type="module" crossorigin src="/react-mesto-auth/assets/index-6c6b68d3.js"></script>
+    <script type="module" crossorigin src="/react-mesto-auth/assets/index-1a4d8f77.js"></script>
     <link rel="stylesheet" href="/react-mesto-auth/assets/index-e1b41a4d.css">
   </head>
   <body class="page">
     <div id="root"></div>
     
+    <script type="javascript">
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+          l.pathname.slice(0, -1) + decoded + l.hash
+          ); 
+        } 
+      }(window.location))
+    </script>
   </body>
 </html>
