@@ -12,7 +12,7 @@ return (
     <Header>
       <div>      
         <p className='header__text-email'>{email}
-          <Link to='/sign-in' className='header__text_color' onClick={onExit}>Выйти</Link>
+          <Link to='/react-mesto-auth/sign-in' replace className='header__text_color' onClick={onExit}>Выйти</Link>
         </p> 
       </div>
     </Header>

@@ -194,12 +194,12 @@ export default function App() {
     authApi.getContent(token).then(() => {
       localStorage.setItem('isLoggenIn', JSON.stringify(true))
       setIsLoggedIn(true)
-      navigate('/')
+      navigate('/react-mesto-auth')
       setEmail(localStorage.getItem('email'))
     })
     .catch(() => {
       localStorage.setItem('isLoggenIn', JSON.stringify(false))
-      navigate('/sign-in', {replace: false} )
+      navigate('/react-mesto-auth/sign-in', {replace: false} )
     })
   }
 
@@ -217,7 +217,7 @@ export default function App() {
         localStorage.setItem('isLoggenIn', JSON.stringify(true))
         setIsLoggedIn(true)
         localStorage.setItem('jwt', res.token)
-        navigate('/' , {replece: true})
+        navigate('/react-mesto-auth' , {replece: true})
       }
     })
     .catch((error) => {
@@ -240,7 +240,7 @@ export default function App() {
       setIsMessage({
         text: 'Вы успешно зарегистрировались!', 
         isSign: '1'})
-        navigate('/sign-in', {replece: false})
+        navigate('/react-mesto-auth/sign-in', {replece: true})
     })
     .catch((err) => {
       if (err === 'Ошибка: 400') {
@@ -258,11 +258,11 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Routes>
-        <Route path='/sign-in' element={<Login onLogin={hahdleLogin}/>}
+        <Route path='/react-mesto-auth/sign-in' element={<Login onLogin={hahdleLogin}/>}
         />
-        <Route path='/sign-up' element={<Register onRegister={handleRegister}/>}
+        <Route path='/react-mesto-auth/sign-up' element={<Register onRegister={handleRegister}/>}
         />
-        <Route path='/' element={
+        <Route path='/react-mesto-auth' element={
           <ProtectedRoute loggedIn={isLoggedIn}>
             <Main
               onEditAvatar={handleEditAvatarClick}
@@ -277,7 +277,7 @@ export default function App() {
             />
           </ProtectedRoute>}
         />
-        <Route path="*" element={<Navigate to={isLoggedIn ? '/' : '/sign-in'} />}
+        <Route path="*" element={<Navigate to={isLoggedIn ? '/react-mesto-auth' : '/react-mesto-auth/sign-in'} />}
         />
       </Routes>
       {isLoggedIn && <Footer/>}

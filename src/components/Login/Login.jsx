@@ -22,7 +22,7 @@ export default function Login({onLogin}) {
   return (
     <>
       <Header>
-        <Link to='/sign-up' className='header__text'>Регистрация</Link>
+        <Link to='/react-mesto-auth/sign-up' replace className='header__text'>Регистрация</Link>
       </Header>
       <main>
         <h2 className='login__text-entry'>Вход</h2>
