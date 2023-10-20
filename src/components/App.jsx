@@ -194,8 +194,7 @@ export default function App() {
     authApi.getContent(token).then(() => {
       localStorage.setItem('isLoggenIn', JSON.stringify(true))
       setIsLoggedIn(true)
-      navigate('/react-mesto-auth', {replace:true})
-      setEmail(localStorage.getItem('email'))
+      navigate('/react-mesto-auth', {replace: true})
     })
     .catch(() => {
       localStorage.setItem('isLoggenIn', JSON.stringify(false))
@@ -204,18 +203,19 @@ export default function App() {
 
   useEffect(() => {
     const token = localStorage.getItem('jwt')
-    auth(token)
+    if(token) {    
+      auth(token)
+    }
   }, [])
   
   function hahdleLogin(email, password) {
-    setEmail(email)
     localStorage.setItem('email', email)
     return authApi.authorize(email, password)
     .then((res) => {
       if (res.token) {
-        localStorage.setItem('isLoggenIn', JSON.stringify(true))
         setIsLoggedIn(true)
         localStorage.setItem('jwt', res.token)
+        localStorage.setItem('isLoggenIn', JSON.stringify(true))
         navigate('/react-mesto-auth' , {replece: true})
       }
     })
@@ -251,7 +251,8 @@ export default function App() {
 
   function onSignOut(){
     localStorage.clear()
-    loggenInFromStorage(false)
+    setIsLoggedIn(false)
+    navigate('/react-mesto-auth/sign-in', { replace: true });
   }
 
   return (
@@ -269,7 +270,7 @@ export default function App() {
               onAddPlace={handleAddPlaceClick}
               onCardClick={handleCardClick}
               onCardLike={handleCardLike}
-              email={email}
+              email={localStorage.getItem('email', email)}
               onCardDelete={handleDeleteConfirmClick}
               onSignOut={onSignOut}
               cards={ cards }
