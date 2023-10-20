@@ -16,7 +16,7 @@ import { api } from '../utils/Api'
 import { authApi } from '../utils/Auth'
 
 export default function App() {
-  const  loggenInFromStorage = JSON.parse(localStorage.getItem('isLoggenIn'))
+  const loggenInFromStorage = JSON.parse(localStorage.getItem('isLoggenIn'))
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
@@ -194,12 +194,11 @@ export default function App() {
     authApi.getContent(token).then(() => {
       localStorage.setItem('isLoggenIn', JSON.stringify(true))
       setIsLoggedIn(true)
-      navigate('/react-mesto-auth')
+      navigate('/react-mesto-auth', {replace:true})
       setEmail(localStorage.getItem('email'))
     })
     .catch(() => {
       localStorage.setItem('isLoggenIn', JSON.stringify(false))
-      navigate('/react-mesto-auth/sign-in', {replace: false} )
     })
   }
 
@@ -272,7 +271,7 @@ export default function App() {
               onCardLike={handleCardLike}
               email={email}
               onCardDelete={handleDeleteConfirmClick}
-              onExit={onSignOut}
+              onSignOut={onSignOut}
               cards={ cards }
             />
           </ProtectedRoute>}

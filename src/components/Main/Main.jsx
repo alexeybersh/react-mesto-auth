@@ -4,15 +4,16 @@ import Card from '../Card/Card'
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Header from '../header/Header';
 
-export default function Main({cards,email,onEditAvatar,onEditProfile,onAddPlace,onCardClick,onCardLike,onCardDelete,onExit}) {
+export default function Main({cards,email,onEditAvatar,onEditProfile,onAddPlace,onCardClick,onCardLike,onCardDelete,onSignOut}) {
 const {avatar,name,about} = useContext(CurrentUserContext);
+
 
 return (
   <>
     <Header>
       <div>      
         <p className='header__text-email'>{email}
-          <Link to='/react-mesto-auth/sign-in' replace className='header__text_color' onClick={onExit}>Выйти</Link>
+          <Link to='/react-mesto-auth/sign-in' replace className='header__text_color' onClick={onSignOut}>Выйти</Link>
         </p> 
       </div>
     </Header>
