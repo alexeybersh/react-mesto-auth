@@ -252,7 +252,7 @@ export default function App() {
   function onSignOut(){
     localStorage.clear()
     setIsLoggedIn(false)
-    navigate('/react-mesto-auth/sign-in', { replace: true });
+    // navigate('/react-mesto-auth/sign-in', { replace: true });
   }
 
   return (
