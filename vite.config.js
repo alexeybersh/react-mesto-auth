@@ -8,8 +8,8 @@ export default defineConfig({
   plugins: [react()],
   server: { open: true, port: 5173, },
   build: {
-    resolve: {
-      alias: {
+    rollupOptions: {
+      input: {
         main: resolve(__dirname, "index.html"),
         404: resolve(__dirname, "public/404.html"),
       },
