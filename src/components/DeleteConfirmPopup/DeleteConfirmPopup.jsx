@@ -1,22 +1,22 @@
 import PopupWithForm from "../PopupWithForm/PopupWithForm"
 
-export default function DeleteConfirmPopup(cardDelete,onDeleteSubmit,isRenderLoading,isOpen,onClose) {
+export default function DeleteConfirmPopup(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    onDeleteSubmit(cardDelete)
+    props.onDeleteSubmit(props.cardDelete)
   }
 
   return (
     <PopupWithForm
       name="delete-image"  
       title="Вы уверены?"
-      submitText={isRenderLoading? "Удаление..." : "Да"}
-      isOpen={isOpen}
-      onClose={onClose}
+      submitText={props.isRenderLoading? "Удаление..." : "Да"}
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      isValid={true}
       onSubmit={handleSubmit}
-      >
-    </PopupWithForm>
+    />
   )
 }

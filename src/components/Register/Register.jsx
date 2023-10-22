@@ -1,22 +1,14 @@
 import{ Link, useNavigate } from 'react-router-dom'
 import Header from '../header/Header'
-import { useState, createRef } from 'react'
+import { useState, useRef } from 'react'
 
 export default function Register({onRegister}) {
-  const inputEmail = createRef()
-  const inputPassword = createRef()
-
-  const [isEmail, setIsEmail] = useState('')
-  const [isPassword, setIsPassword] = useState('')
-
-  const handleChange = (event) => {
-    setIsEmail(inputEmail.current.value);
-    setIsPassword(inputPassword.current.value)
-  }
+  const inputEmail = useRef()
+  const inputPassword = useRef()
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onRegister(isEmail, isPassword)
+    onRegister(inputEmail.current.value, inputPassword.current.value)
   }
 
   return (  
@@ -26,7 +18,7 @@ export default function Register({onRegister}) {
       </Header>
       <main>
         <h2 className='login__text-entry'>Регистрация</h2>
-        <form className="login__form" onChange={handleChange} onSubmit={handleSubmit}>
+        <form className="login__form" onSubmit={handleSubmit}>
           <input
             className="login__input"
             id="email-input"

@@ -1,79 +1,28 @@
-import { createRef, useState, useEffect} from 'react'
+import { useEffect} from 'react'
 import PopupWithForm from "../PopupWithForm/PopupWithForm"
+import { useFormAndValidation } from '../../hooks/useFormAndValidation'
 
 export default function AddPlacePopup({onClose,isRenderLoading,isOpen,onAddPlace}){
-  const namePlace = createRef();
-  const linkPlace = createRef();
-  const [nameDirty, setNameDyrty] = useState(false)
-  const [nameError, setNameError] = useState("Поле не может быть пустым")
-  const [linkDirty, setLinkDirty] = useState(false)
-  const [linkError, setLinkError] = useState("Поле не может быть пустым")
-  const [formVailed, setFormVailed] = useState(false)
+  const {values, handleChange, errors, isValid, resetForm} = useFormAndValidation()
 
-  function bluerHandler(e){
-    switch(e.target.name){
-      case "name": 
-        setNameDyrty(true)
-        break
-      case "link":
-        setLinkDirty(true)
-        break
+  // Эффект для очистки формы
+  useEffect(() =>{
+    if(!isOpen) {
+      resetForm();
     }
-  }
+  },[isOpen, resetForm])
 
-  function handleChangeName() {
-    if (namePlace.current.value.length < 2 || namePlace.current.value.length > 30) {
-      setNameDyrty(true)
-      setNameError('Название не может быть короче 2 символов или длинее 30 символов')
-    if (!namePlace.current.value) {
-      setNameError("Поле не может быть пустым")
-      }
-    } else {
-      setNameError('')
-    } 
-  }  
-
-  function handleChangeLink() {
-    const urlPattern = new RegExp(/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/);
-    if (!urlPattern.test(linkPlace.current.value)) {
-      setLinkDirty(true)
-      setLinkError('Неверный адрес страницы')
-      if (!linkPlace.current.value) {
-        setLinkError("Поле не может быть пустым")
-      }
-    } else {
-      setLinkError('')
-    } 
-  } 
-
-  useEffect(() => {
-    setNameDyrty(false)
-    setLinkDirty(false)
-    namePlace.current.value =""
-    linkPlace.current.value =""
-    setNameError("Поле не может быть пустым")
-    setLinkError("Поле не может быть пустым")
-    setFormVailed(false)
-  }, [isOpen])
-
-  useEffect(() => {
-    if(linkError || nameError) {
-      setFormVailed(false)
-    } else {
-      setFormVailed(true)
-    }
-  }, [linkError, nameError])
-  
+ 
   // Ручка для Добавления картинки после сохранения
   function handleSubmit(e) {
     e.preventDefault();
 
     onAddPlace({
-      name: namePlace.current.value,
-      link: linkPlace.current.value
+      name: values.name,
+      link: values.link
     });
   }
- 
+
   return (
     <PopupWithForm
       name="add-image"
@@ -82,7 +31,7 @@ export default function AddPlacePopup({onClose,isRenderLoading,isOpen,onAddPlace
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      onDisabled={!formVailed}> 
+      isValid={isValid}>
       <label className="popup__field">
         <input
           className="popup__input popup__input_input-name-image_text"
@@ -93,11 +42,10 @@ export default function AddPlacePopup({onClose,isRenderLoading,isOpen,onAddPlace
           maxLength="30"
           placeholder="Название"
           required
-          ref={namePlace}
-          onBlur={bluerHandler}
-          onChange={handleChangeName}
+          value={values.name || ''}
+          onChange={handleChange}
         />
-        <span className={`popup__input-error title-input-error ${(nameDirty && nameError) && "popup__input-error_active"}`}>{nameError}</span>
+        <span className={`popup__input-error title-input-error ${(!isValid) && "popup__input-error_active"}`}>{errors.name}</span>
       </label>
       <label className="popup__field">
         <input
@@ -107,11 +55,10 @@ export default function AddPlacePopup({onClose,isRenderLoading,isOpen,onAddPlace
           type="url"
           placeholder="Ссылка на картинку"
           required
-          ref={linkPlace}
-          onBlur={bluerHandler}
-          onChange={handleChangeLink}
+          value={values.link || ''}
+          onChange={handleChange}
           />
-          <span className={`popup__input-error url-input-error ${(linkDirty && linkError) && "popup__input-error_active"}`}>{linkError}</span>
+          <span className={`popup__input-error url-input-error ${(!isValid) && "popup__input-error_active"}`}>{errors.link}</span>
       </label>
     </PopupWithForm>
   )

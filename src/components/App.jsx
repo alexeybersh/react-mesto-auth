@@ -11,7 +11,7 @@ import EditAvatarPopup from './EditAvatarPopup/EditAvatarPopup'
 import AddPlacePopup from './AddPlacePopup/AddPlacePopup'
 import DeleteConfirmPopup from './DeleteConfirmPopup/DeleteConfirmPopup'
 import ImagePopup from './ImagePopup/ImagePopup'
-import {CurrentUserContext } from '../components/contexts/CurrentUserContext';
+import {CurrentUserContext } from '../contexts/CurrentUserContext';
 import { api } from '../utils/Api'
 import { authApi } from '../utils/Auth'
 
@@ -29,7 +29,6 @@ export default function App() {
   const [cardDelete, setCardDelete] = useState({})
   const [isLoggedIn, setIsLoggedIn] = useState(loggenInFromStorage)
   const [isMessage, setIsMessage] = useState({ text: '', isSign: '' })
-  const [email, setEmail] = useState(null)
   const navigate = useNavigate()
 
   // Ручка для открытия попапа аватара
@@ -78,14 +77,14 @@ export default function App() {
       setCards((state) => state.map((c) => c._id === card._id ? newCard : c));    
       })
 
-      .catch((err) => {console.log(err)})   
+      .catch((console.error))   
     } else {
       api.isLikeRemove(card._id)
       .then((newCard) => {
       setCards((state) => state.map((c) => c._id === card._id ? newCard : c));    
       })
 
-      .catch((err) => {console.log(err)})   
+      .catch(console.error)   
     }
   } 
 
@@ -98,7 +97,7 @@ export default function App() {
         closeAllPopups()
       })
       
-      .catch((err) => {console.log(err)})
+      .catch(console.error)
       
       .finally(() => {
         setRenderLoading(false)
@@ -114,7 +113,7 @@ export default function App() {
       closeAllPopups()
     })  
   
-    .catch((err) => {console.log(err)})
+    .catch(console.error)
 
     .finally(() => {
       setRenderLoading(false)
@@ -130,7 +129,7 @@ export default function App() {
       closeAllPopups()
     })  
   
-    .catch((err) => {console.log(err)})
+    .catch(console.error)
 
     .finally(() => {
       setRenderLoading(false)
@@ -146,7 +145,7 @@ export default function App() {
       closeAllPopups()      
     })
 
-    .catch((err) => {console.log(err)})
+    .catch(console.error)
 
     .finally(() => {
       setRenderLoading(false)
@@ -161,34 +160,8 @@ export default function App() {
        setCards(allCards.reverse());
     })
 
-    .catch((err) => {console.log(err)})
+    .catch(console.error)
   }, [])
-
-  // Эффект для закрытия попапа по ESC и по overlay
-  useEffect(() => {
-    if(isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isDeleteConfirmPopupOpen || isImagePopupOpen || setIsMessage)
-    {
-      function handleEscape(evt) {
-        if(evt.key == 'Escape') {
-          closeAllPopups()
-        }        
-      }
-
-      function handleOverlay(evt) {
-        if(evt.target.classList.contains('popup_opened') !==  evt.target.classList.contains('popup__close-button')) {
-          closeAllPopups()
-        };
-      }    
-
-      document.addEventListener('keydown', handleEscape)
-      document.addEventListener('mousedown', handleOverlay)
-
-      return() => {
-        document.removeEventListener('keydown', handleEscape)
-        document.removeEventListener('mousedown', handleOverlay)
-      }
-    }    
-  }, [isEditAvatarPopupOpen, isEditProfilePopupOpen, isAddPlacePopupOpen, isDeleteConfirmPopupOpen, isImagePopupOpen, setIsMessage])
 
   function auth(token) {
     authApi.getContent(token).then(() => {
@@ -208,7 +181,7 @@ export default function App() {
     }
   }, [])
   
-  function hahdleLogin(email, password) {
+  function handleLogin(email, password) {
     localStorage.setItem('email', email)
     return authApi.authorize(email, password)
     .then((res) => {
@@ -242,11 +215,11 @@ export default function App() {
         navigate('/react-mesto-auth/sign-in', {replece: true})
     })
     .catch((err) => {
-      if (err === 'Ошибка: 400') {
-        setIsMessage({
-          text: 'Что-то пошло не так! Попробуйте ещё раз.', 
-          isSign: '0'})
-    }})
+      setIsMessage({
+        text: 'Что-то пошло не так! Попробуйте ещё раз.', 
+        isSign: '0'
+      })
+    })
   }
 
   function onSignOut(){
@@ -257,7 +230,7 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Routes>
-        <Route path='/react-mesto-auth/sign-in' element={<Login onLogin={hahdleLogin}/>}
+        <Route path='/react-mesto-auth/sign-in' element={<Login onLogin={handleLogin}/>}
         />
         <Route path='/react-mesto-auth/sign-up' element={<Register onRegister={handleRegister}/>}
         />
@@ -269,7 +242,7 @@ export default function App() {
               onAddPlace={handleAddPlaceClick}
               onCardClick={handleCardClick}
               onCardLike={handleCardLike}
-              email={localStorage.getItem('email', email)}
+              email={localStorage.getItem('email')}
               onCardDelete={handleDeleteConfirmClick}
               onSignOut={onSignOut}
               cards={ cards }

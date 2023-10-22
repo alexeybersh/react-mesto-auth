@@ -5,4 +5,4 @@ export default function ProtectedRoute({ loggedIn, children }) {
     return <Navigate to="/react-mesto-auth/sign-in" replace />;
   }
   return children;
-};
+};  

@@ -1,7 +1,7 @@
 import { useContext} from 'react';
 import{ Link } from 'react-router-dom'
 import Card from '../Card/Card'
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Header from '../header/Header';
 
 export default function Main({cards,email,onEditAvatar,onEditProfile,onAddPlace,onCardClick,onCardLike,onCardDelete,onSignOut}) {
