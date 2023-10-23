@@ -6,14 +6,16 @@ import { useFormAndValidation } from '../../hooks/useFormAndValidation'
 
 export default function EditProfilePopup({isOpen,onUpdateUser,isRenderLoading,onClose}) {
   const currentUser = useContext(CurrentUserContext);
-  const {values, handleChange, errors, isValid} = useFormAndValidation()
+  const {values, setValues, handleChange, errors, isValid} = useFormAndValidation()
 
   // Эффект для заполнения формы
   useEffect(() =>{
     if(isOpen) {
-      values.name = currentUser.name,
-      values.job = currentUser.about
-    }
+      setValues({
+        name: currentUser.name,
+        job: currentUser.about
+      })
+     }
   },[isOpen])
 
     
@@ -21,10 +23,7 @@ export default function EditProfilePopup({isOpen,onUpdateUser,isRenderLoading,on
     function handleSubmit(e) {
       e.preventDefault();
 
-      onUpdateUser({
-        name: values.name,
-        job: values.job,
-      });
+      onUpdateUser(values);
     } 
 
   return (

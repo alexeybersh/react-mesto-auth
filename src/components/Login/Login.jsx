@@ -1,14 +1,14 @@
 import{ Link } from 'react-router-dom'
 import Header from '../header/Header'
-import { useState, useRef } from 'react'
+import { useForm } from '../../hooks/useForm' 
 
 export default function Login({onLogin}) {
-  const inputEmail = useRef()
-  const inputPassword = useRef()
+  const {values, handleChange} = useForm({});
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onLogin(inputEmail.current.value, inputPassword.current.value)
+
+    onLogin(values)
   }
 
   return (
@@ -25,7 +25,8 @@ export default function Login({onLogin}) {
             name="email"
             type="email"
             placeholder="Email"
-            ref={inputEmail}
+            value={values.email || ''}
+            onChange={handleChange}
           />
           <input
             className="login__input"
@@ -33,7 +34,8 @@ export default function Login({onLogin}) {
             name="password"
             type="password"
             placeholder="Пароль"
-            ref={inputPassword}
+            value={values.password || ''}
+            onChange={handleChange}
           />
           <button className="login__save-button" type="submit">
             Войти

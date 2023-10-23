@@ -104,64 +104,57 @@ export default function App() {
       }) 
   }
 
+  // можно сделать универсальную функцию, которая принимает функцию запроса
+  function handleSubmit(request) {
+    // изменяем текст кнопки до вызова запроса
+    setRenderLoading(true);
+    request()
+      // закрывать попап нужно только в `then`
+      .then(closeAllPopups)
+      // в каждом запросе нужно ловить ошибку
+      // console.error обычно используется для логирования ошибок, если никакой другой обработки ошибки нет
+      .catch(console.error)
+      // в каждом запросе в `finally` нужно возвращать обратно начальный текст кнопки
+      .finally(() => setRenderLoading(false));
+  }
+
   // Ручка для обновления профиля
   function handleUpdateUser(newData){
-    setRenderLoading(true)
-    api.setUserInfo(newData)
-    .then((data) => {
-      setCurrentUser(data)
-      closeAllPopups()
-    })  
-  
-    .catch(console.error)
-
-    .finally(() => {
-      setRenderLoading(false)
-    }) 
-  } 
+    function makeRequest() {
+      return api.setUserInfo(newData).then(setCurrentUser)
+    }
+    handleSubmit(makeRequest)
+  }
 
   // Ручка для обновления аватара
   function handleUpdateAvatar(newData){
-    setRenderLoading(true)
-    api.setAvatar(newData)
-    .then((data) => { 
-      setCurrentUser(data)
-      closeAllPopups()
-    })  
-  
-    .catch(console.error)
-
-    .finally(() => {
-      setRenderLoading(false)
-    }) 
+    function makeRequest() {
+      return api.setAvatar(newData).then(setCurrentUser)
+    }
+    handleSubmit(makeRequest)
   }
 
   // Ручка для обновления картинки
   function handleAddPlaceSubmit(newData){
-    setRenderLoading(true)
-    api.createCard(newData)
-    .then((newCard) => {
-      setCards([newCard, ...cards])
-      closeAllPopups()      
-    })
-
-    .catch(console.error)
-
-    .finally(() => {
-      setRenderLoading(false)
-    }) 
+    function makeRequest() {
+      return api.createCard(newData).then((newCard) => setCards([newCard, ...cards]))
+    }
+    handleSubmit(makeRequest)
   }
-  
+
+
   // Эффект для получения по апи информации о юзере и массив картинок
   useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getAllCards()])
-    .then(([userData, allCards]) => {
-      setCurrentUser(userData);
-       setCards(allCards.reverse());
-    })
+    if (isLoggedIn){
+      Promise.all([api.getUserInfo(), api.getAllCards()])
+      .then(([userData, allCards]) => {
+        setCurrentUser(userData);
+        setCards(allCards.reverse());
+      })
 
-    .catch(console.error)
-  }, [])
+      .catch(console.error)
+    }
+  }, [isLoggedIn])
 
   function auth(token) {
     authApi.getContent(token).then(() => {
@@ -181,7 +174,8 @@ export default function App() {
     }
   }, [])
   
-  function handleLogin(email, password) {
+  function handleLogin({email, password}) {
+    console.log(email, password);
     localStorage.setItem('email', email)
     return authApi.authorize(email, password)
     .then((res) => {
@@ -206,7 +200,7 @@ export default function App() {
     })
   }
 
-  function handleRegister(email, password) {
+  function handleRegister({email, password}) {
     return authApi.register(email, password)
     .then(() => {
       setIsMessage({
@@ -225,6 +219,7 @@ export default function App() {
   function onSignOut(){
     localStorage.clear()
     setIsLoggedIn(false)
+    setCards([]);    
   }
 
   return (
@@ -234,7 +229,7 @@ export default function App() {
         />
         <Route path='/react-mesto-auth/sign-up' element={<Register onRegister={handleRegister}/>}
         />
-        <Route path='/react-mesto-auth' element={
+       <Route path='/react-mesto-auth' element={
           <ProtectedRoute loggedIn={isLoggedIn}>
             <Main
               onEditAvatar={handleEditAvatarClick}

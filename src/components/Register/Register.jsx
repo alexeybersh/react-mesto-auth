@@ -1,14 +1,14 @@
 import{ Link, useNavigate } from 'react-router-dom'
 import Header from '../header/Header'
-import { useState, useRef } from 'react'
+import { useForm } from '../../hooks/useForm' 
 
 export default function Register({onRegister}) {
-  const inputEmail = useRef()
-  const inputPassword = useRef()
+  const {values, handleChange} = useForm({});
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onRegister(inputEmail.current.value, inputPassword.current.value)
+
+    onRegister(values)
   }
 
   return (  
@@ -25,7 +25,8 @@ export default function Register({onRegister}) {
             name="email"
             type="email"
             placeholder="Email"
-            ref={inputEmail}
+            value={values.email || ''}
+            onChange={handleChange}
           />
           <input
             className="login__input"
@@ -33,7 +34,8 @@ export default function Register({onRegister}) {
             name="password"
             type="password"
             placeholder="Пароль"
-            ref={inputPassword}
+            value={values.password || ''}
+            onChange={handleChange}
           />
           <button className="login__save-button" type="submit">
             Зарегистрироваться
