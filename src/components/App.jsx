@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import{ Routes, Route, useNavigate, Navigate } from 'react-router-dom'
-import Register from './Register/Register'
-import Login from './Login/Login'
-import InfoTooltip from './InfoTooltip/InfoTooltip'
-import Main from './Main/Main'
-import Footer from './Footer/Footer'
-import ProtectedRoute from './ProtectedRoute/ProtectedRoute'
-import EditProfilePopup from './EditProfilePopup/EditProfilePopup'
-import EditAvatarPopup from './EditAvatarPopup/EditAvatarPopup'
-import AddPlacePopup from './AddPlacePopup/AddPlacePopup'
-import DeleteConfirmPopup from './DeleteConfirmPopup/DeleteConfirmPopup'
-import ImagePopup from './ImagePopup/ImagePopup'
+import Register from './Register'
+import Login from './Login'
+import InfoTooltip from './InfoTooltip'
+import Main from './Main'
+import Footer from './Footer'
+import ProtectedRoute from './ProtectedRoute'
+import EditProfilePopup from './EditProfilePopup'
+import EditAvatarPopup from './EditAvatarPopup'
+import AddPlacePopup from './AddPlacePopup'
+import DeleteConfirmPopup from './DeleteConfirmPopup'
+import ImagePopup from './ImagePopup'
 import {CurrentUserContext } from '../contexts/CurrentUserContext';
 import { api } from '../utils/Api'
 import { authApi } from '../utils/Auth'
@@ -46,6 +46,7 @@ export default function App() {
     setIsAddPlacePopupOpen(true)
   }
 
+  // Ручка для для попапа подтверждения удаления
   function handleDeleteConfirmClick(card){
     setIsDeleteConfirmPopupOpen(true)
     setCardDelete(card)
@@ -88,33 +89,14 @@ export default function App() {
     }
   } 
 
-  // Ручка для удаления карточки
-  function handleCardDelete(card){
-    setRenderLoading(true)
-    api.deleteCard(card._id)
-      .then(() => {
-        setCards(cards.filter((c) => c._id !== card._id))
-        closeAllPopups()
-      })
-      
-      .catch(console.error)
-      
-      .finally(() => {
-        setRenderLoading(false)
-      }) 
-  }
-
-  // можно сделать универсальную функцию, которая принимает функцию запроса
+  // Универсальная функция запроса
   function handleSubmit(request) {
-    // изменяем текст кнопки до вызова запроса
     setRenderLoading(true);
     request()
-      // закрывать попап нужно только в `then`
       .then(closeAllPopups)
-      // в каждом запросе нужно ловить ошибку
-      // console.error обычно используется для логирования ошибок, если никакой другой обработки ошибки нет
+
       .catch(console.error)
-      // в каждом запросе в `finally` нужно возвращать обратно начальный текст кнопки
+
       .finally(() => setRenderLoading(false));
   }
 
@@ -142,6 +124,14 @@ export default function App() {
     handleSubmit(makeRequest)
   }
 
+  // Ручка для удаления карточки
+  function handleCardDelete(card){
+    function makeRequest() {
+      console.log(cards);
+      return api.deleteCard(card._id).then(() => setCards(cards.filter((c) => c._id !== card._id)))
+    }
+    handleSubmit(makeRequest)
+  }
 
   // Эффект для получения по апи информации о юзере и массив картинок
   useEffect(() => {

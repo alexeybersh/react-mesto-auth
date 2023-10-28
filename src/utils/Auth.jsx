@@ -52,5 +52,4 @@ export const authApi = new Auth({
   url: 'https://auth.nomoreparties.co',
   headers: {
     "Content-Type": "application/json",
-    "authorization": "2d8f0eb6-386b-4584-9f34-de03cb37fac0"
   }})

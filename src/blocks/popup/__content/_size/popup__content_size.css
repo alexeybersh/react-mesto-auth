@@ -1,8 +1,14 @@
 .popup__content_size{
   padding-top: 60px;  
   padding-bottom: 60px;
-  min-height: 330px;
+  min-height: 308px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+@media screen and (max-width: 890px) {
+  .popup__content_size {
+    padding: 50px 20px;
+  }
 }

@@ -14,3 +14,9 @@
   opacity: 0.6;
   cursor: pointer;
 }
+
+@media screen and (max-width: 890px) {
+  .login__text {
+    margin-top: 20px;
+  }
+}

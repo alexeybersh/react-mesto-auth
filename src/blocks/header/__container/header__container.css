@@ -1,0 +1,12 @@
+.header__container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: 0.5s;
+  transform: translateY(0)
+}
+
+.header__container_active {
+  transition: 0.5s;
+  transform: translateY(-142px)
+}

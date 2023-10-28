@@ -1,23 +1,22 @@
-import{ Link, useNavigate } from 'react-router-dom'
-import Header from '../header/Header'
-import { useForm } from '../../hooks/useForm' 
+import{ Link } from 'react-router-dom'
+import Header from './Header'
+import { useForm } from '../hooks/useForm' 
 
-export default function Register({onRegister}) {
+export default function Login({onLogin}) {
   const {values, handleChange} = useForm({});
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    onRegister(values)
+    onLogin(values)
   }
 
-  return (  
+  return (
     <>
-      <Header>
-        <Link to='/react-mesto-auth/sign-in' replace className='header__text'>Войти</Link>
+      <Header isEntryOrRegister={false}>
       </Header>
       <main>
-        <h2 className='login__text-entry'>Регистрация</h2>
+        <h2 className='login__text-entry'>Вход</h2>
         <form className="login__form" onSubmit={handleSubmit}>
           <input
             className="login__input"
@@ -38,9 +37,8 @@ export default function Register({onRegister}) {
             onChange={handleChange}
           />
           <button className="login__save-button" type="submit">
-            Зарегистрироваться
+            Войти
           </button>
-          <Link to='/react-mesto-auth/sign-in' replace className='login__text'>Уже зарегистрированы? Войти</Link>
         </form>
       </main>
     </>

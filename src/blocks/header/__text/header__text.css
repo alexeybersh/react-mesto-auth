@@ -1,6 +1,6 @@
 .header__text{
   margin: 0;
-  padding: 6px 0 0 24px;
+  padding: 51px 0 0 24px;
   color: white;
   font-size: 18px;
   line-height: 22px;
@@ -10,4 +10,12 @@
 .header__text:hover{
   opacity: 0.6;
   cursor: pointer;
+}
+
+@media screen and (max-width: 890px) {
+  .header__text {
+    font-size: 14px;
+    line-height: normal;
+    padding-right: 30px;
+  }
 }

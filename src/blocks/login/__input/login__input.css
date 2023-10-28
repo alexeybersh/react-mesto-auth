@@ -14,3 +14,9 @@
   outline: none;
   padding-bottom: 13px;
 }
+
+@media screen and (max-width: 890px) {
+  .login__text-entry {
+    font-size: 20px;
+  }
+}

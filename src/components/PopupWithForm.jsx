@@ -1,4 +1,4 @@
-import { usePopupClose } from '../../hooks/usePopupClose'
+import { usePopupClose } from '../hooks/usePopupClose'
 
 export default function PopupWithForm({name,title,submitText,children,isOpen,onClose,onSubmit,isValid}) {
   

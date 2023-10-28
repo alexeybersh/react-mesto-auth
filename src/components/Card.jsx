@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import imageTrash from '../../images/trash.svg';
+import imageTrash from '../images/trash.svg';
 
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export default function Card({card,cardLink,cardName,onCardClick,onCardLike,onCardDelete,handleDeleteClick}) {
   const currentUser = useContext(CurrentUserContext);

@@ -1,6 +1,6 @@
-import imageSuccess from '../../images/UnionBlack.svg'
-import imageFaild from '../../images/UnionRed.svg'
-import { usePopupClose } from '../../hooks/usePopupClose'
+import imageSuccess from '../images/UnionBlack.svg'
+import imageFaild from '../images/UnionRed.svg'
+import { usePopupClose } from '../hooks/usePopupClose'
 
 
 export default function InfoTooltip({isMessage,onClose}) {

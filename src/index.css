@@ -16,6 +16,10 @@
 @import "../src/blocks/header/__text/header__text.css";
 @import "../src/blocks/header/__text/_color/header__text_color.css";
 @import "../src/blocks/header/__text-email/header__text-email.css";
+@import "../src/blocks/header/__menu-btn/header__menu-btn.css";
+@import "../src/blocks/header/__container/header__container.css";
+@import "../src/blocks/header/__close-button/header__close-button.css";
+@import "../src/blocks/header/__navbar/header__navbar.css";
 
 /* login */
 @import "../src/blocks/login/__text-entry/login__text-entry.css";

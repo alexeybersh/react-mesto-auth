@@ -3,9 +3,21 @@
   padding: 0 200px 60px;
   font-style: normal;
   background-color: #000000;
+  transition: 0.5s;
+  transform: translateY(0)
 }
 
-@media screen and (max-width: 768px) {
+.footer_active{
+  transition: 0.5s;
+  transform: translateY(-142px)
+}
+
+.footer_inactive{
+  transition: 0.5s;
+  transform: translateY(0)
+}
+
+@media screen and (max-width: 890px) {
   .footer {
     padding: 0 19px 36px;
   }
