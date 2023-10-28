@@ -5,17 +5,10 @@ import useWindowSize from '../hooks/useResize'
 
 export default function Header({email,isEntryOrRegister,isLoggedIn,children,onSignOut}) {
   const [isVisable, setIsVisable] = useState(false)
-  // let   [screenWidth, setScreenWidth] = useState(window.screen.width)
   const { width, height } = useWindowSize()
   const header = document.querySelector(".header__container");
   const mainPage = document.querySelector(".main-page");
   const footer = document.querySelector(".footer");
-
-  // const screenWidth2= (window.screen.width)
-
-  // window.addEventListener('resize',(e) => {
-  //   setScreenWidth(window.screen.width);  
-  // });
 
   useEffect(() =>{
     if(width <= 890 && mainPage){
@@ -44,7 +37,6 @@ export default function Header({email,isEntryOrRegister,isLoggedIn,children,onSi
   }
 
   function handleNavBarClose(){
-    console.log('>>>');
     setIsVisable(false)
     mainPage.classList.remove("main-page_inactive");
     footer.classList.remove("footer_inactive");
