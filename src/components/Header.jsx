@@ -20,9 +20,8 @@ export default function Header({email,isEntryOrRegister,isLoggedIn,children,onSi
     else if(mainPage) {
       setIsVisable(true)
       mainPage.classList.remove('main-page_active');
-      footer.classList.remove('footer_active');
-      header.classList.remove('header__container_active');  
       mainPage.classList.remove("main-page_inactive");
+      footer.classList.remove('footer_active');
       footer.classList.remove("footer_inactive");
       header.classList.remove('header__container_active');  
     }
